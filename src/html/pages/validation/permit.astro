@@ -1,0 +1,114 @@
+---
+import Head from "@components/_head.astro";
+import Scripts from "@components/_scripts.astro";
+
+const title = "Permit Validation";
+const path = "../../../dist";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<!--begin::Head-->
+        <head>
+            <Head title={title} path={path} />
+          </head>
+          <!--end::Head-->
+		<style>
+			:root {
+				--gray-10: hsl(258, 7%, 10%);
+				--gray-20: hsl(258, 7%, 20%);
+				--gray-30: hsl(258, 7%, 30%);
+				--gray-40: hsl(258, 7%, 40%);
+				--gray-50: hsl(258, 7%, 50%);
+				--gray-60: hsl(258, 7%, 60%);
+				--gray-70: hsl(258, 7%, 70%);
+				--gray-80: hsl(258, 7%, 80%);
+				--gray-90: hsl(258, 7%, 90%);
+				--black: #13151A;
+				--accent-light: #E0CCFA;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html {
+				background: var(--black);
+				color-scheme: dark;
+				accent-color: var(--accent-light);
+			}
+
+			body {
+				background-color: var(--gray-10);
+				color: var(--gray-80);
+				font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			a {
+				color: var(--accent-light);
+			}
+
+			.center {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				width: 100vw;
+			}
+
+			h1 {
+				margin-bottom: 8px;
+				color: white;
+				font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+				font-weight: 700;
+				margin-top: 1rem;
+				margin-bottom: 0;
+			}
+
+			.statusCode {
+				color: var(--accent-light);
+			}
+
+			.astro-icon {
+				height: 124px;
+				width: 124px;
+				color: white;
+			}
+
+			pre, code {
+				padding: 2px 8px;
+				background: rgba(0,0,0, 0.25);
+				border: 1px solid rgba(255,255,255, 0.25);
+				border-radius: 4px;
+				font-size: 1.2em;
+				margin-top: 0;
+				max-width: 60em;
+			}
+
+
+		</style>
+        <script>
+            window.onload = async () => {
+                await permitValidation();
+            };
+        </script>
+	</head>
+	<body>
+		<main class="center">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text astro-icon" viewBox="0 0 16 16">
+                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+              </svg>
+			<h1><span class="statusCode" id="statusCodeVal"></span> <span class="statusMessage" id="statusVal"> </span></h1>
+			
+			<pre id="messageVal"></pre>
+			
+		</main>
+        <Scripts path={path} />
+	</body>
+</html>

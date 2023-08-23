@@ -1,0 +1,130 @@
+---
+import Head from "@components/_head.astro";
+import Scripts from "@components/_scripts.astro";
+
+const title = "Glovis Portal | Login";
+const path = "../../../dist";
+const htmlPath = "..";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <!--begin::Head-->
+  <head>
+    <Head title={title} path={path} />
+  </head>
+  <!--end::Head-->
+  <!--begin::Body-->
+  <body class="login-page bg-body-secondary">
+    <div class="login-box">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <!-- <a href={htmlPath + "/#"} class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
+            <h1 class="mb-0">
+              <b>Glovis</b> Portal
+            </h1>
+          </a> -->
+          <h1 class="mb-0 text-center">
+            <b>Glovis</b> Portal
+          </h1>
+        </div>
+        <div class="card-body login-card-body">
+          <p class="login-box-msg">Sign in to start your session</p>
+
+          <!-- <form action="#" method="POST"> -->
+          <div>
+            <div class="input-group mb-1">
+              <div class="form-floating">
+                <input id="user" type="text" class="form-control" value="" placeholder="" />
+                <label for="user">Username</label>
+              </div>
+              <div class="input-group-text">
+                <span class="bi bi-envelope"></span>
+              </div>
+            </div>
+            <div class="input-group mb-1">
+              <div class="form-floating">
+                <input
+                  id="loginPassword"
+                  type="password"
+                  class="form-control"
+                  placeholder=""
+                />
+                <label for="loginPassword">Password</label>
+              </div>
+              <div class="input-group-text">
+                <span class="bi bi-lock-fill"></span>
+              </div>
+            </div>
+            <!--begin::Row-->
+            <div class="row pt-3">
+              <div class="col-8 d-inline-flex align-items-center">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Remember Me
+                  </label>
+                </div>
+              </div>
+              <!-- /.col -->
+              <div class="col-4">
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary" onclick="signin()">Sign In</button>
+                </div>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!--end::Row-->
+          </div>
+          <!-- </form> -->
+
+          <!-- <div class="social-auth-links text-center mb-3 d-grid gap-2">
+            <p>- OR -</p>
+            <a href="#" class="btn btn-primary">
+              <i class="bi bi-facebook me-2"></i> Sign in using Facebook
+            </a>
+            <a href="#" class="btn btn-danger">
+              <i class="bi bi-google me-2"></i> Sign in using Google+
+            </a>
+          </div> -->
+          <!-- /.social-auth-links -->
+
+          <!-- <p class="mb-1">
+            <a href="forgot-password.html">I forgot my password</a>
+          </p>
+          <p class="mb-0">
+            <a href="register.html" class="text-center">
+              Register a new membership
+            </a>
+          </p> -->
+        </div>
+        <!-- /.login-card-body -->
+      </div>
+    </div>
+    <!-- /.login-box -->
+
+    <Scripts path={path} />
+    <!--end::Script-->
+    <div class="modal fade" id="failedLoginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Login Failed</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          Username and password not match !
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+      </div>
+  </div>
+  </body><!--end::Body-->
+</html>

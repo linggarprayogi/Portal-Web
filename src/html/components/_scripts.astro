@@ -1,0 +1,210 @@
+---
+const { path } = Astro.props;
+const adminlteJsUrl = path + "/js/adminlte.js";
+---
+
+<!--begin::Third Party Plugin(OverlayScrollbars)-->
+<script
+  src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.1.0/browser/overlayscrollbars.browser.es6.min.js"
+  integrity="sha256-NRZchBuHZWSXldqrtAOeCZpucH/1n1ToJ3C8mSK95NU="
+  crossorigin="anonymous"
+></script>
+<!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+<script
+  src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+  integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+  crossorigin="anonymous"
+></script>
+<!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+  integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+  crossorigin="anonymous"
+></script>
+<!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+<script src={adminlteJsUrl} is:inline></script>
+<!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+<script is:inline>
+  const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+  const Default = {
+    scrollbarTheme: "os-theme-light",
+    scrollbarAutoHide: "leave",
+    scrollbarClickScroll: true,
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+    if (
+      sidebarWrapper &&
+      typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+    ) {
+      OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+        scrollbars: {
+          theme: Default.scrollbarTheme,
+          autoHide: Default.scrollbarAutoHide,
+          clickScroll: Default.scrollbarClickScroll,
+        },
+      });
+    }
+  });
+</script>
+
+<script is:inline>
+  // set cookie value
+  function setCookie(key, value) {
+    document.cookie = key +"="+ escape(value) +
+      ";domain="+ window.location.hostname +
+      ";path=/";
+  }
+  // delete cookie
+  function deleteCookie(name) {
+    setCookie(name, "");
+  }
+  // get cookie
+  function getCookie(cname) {
+  	  var name = cname + "=";
+  	  var decodedCookie = decodeURIComponent(document.cookie);
+  	  var ca = decodedCookie.split(';');
+  	  for(var i = 0; i <ca.length; i++) {
+  	    var c = ca[i];
+  	    while (c.charAt(0) == ' ') {
+  	      c = c.substring(1);
+  	    }
+  	    if (c.indexOf(name) == 0) {
+  	      return c.substring(name.length, c.length);
+  	    }
+  	  }
+  	  return "";
+  	}
+
+  var remember_me_check_box = document.getElementById('flexCheckDefault'); //$("#flexCheckDefault")
+  // handle click and manage cookie
+  if (remember_me_check_box){
+    remember_me_check_box.onclick = function(){
+      if (remember_me_check_box && remember_me_check_box.checked) {
+        deleteCookie('rememberme');
+        setCookie('rememberme', 'yes');
+      } else {
+        deleteCookie('rememberme');
+        setCookie('rememberme', 'no');
+      }
+    };
+  }
+</script>
+
+<script is:inline>
+  async function signin(){
+      
+      const APP_BASE_URL_API = "http://localhost:9090";
+      var username = document.getElementById('user').value;
+      var password = document.getElementById('loginPassword').value;
+    
+      try{
+        const response = await fetch(`${APP_BASE_URL_API}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZWJhcHAiLCJleHAiOjMxODcxODQ0MDAsImlhdCI6MTY3MjI4OTMxNn0.95VJllUOgowKUbcYTZvgQ1pGR2oA9rsoG8ecIpsRDco6BIBjae5AUu-P-O2X64qSP7077zfPJc3E0cBFeqpXDg'
+              },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+        const data = await response.json();
+        
+        if(data.status === true) {
+            // localStorage.setItem("user", JSON.stringify(data));
+            window.location.href = "../index3.html";
+            // Set Cookie
+            setCookie("accessToken", data.data.accessToken)
+            setCookie("refreshToken", data.data.refreshToken)
+            setCookie("username", data.data.user.username)
+            setCookie("roles", data.data.user.roles)
+
+            userProfiles = data.data.user.username;
+        }else{
+          const myModal = new bootstrap.Modal(document.getElementById('failedLoginModal'), {})
+          myModal.show();
+        }
+      } catch (error) {
+            console.error(error);
+      }
+    }
+
+    function getProfile() {
+      let name = getCookie('username');
+      document.getElementById("userprofile").innerHTML = name;
+      let roles = getCookie('roles');
+      document.getElementById("userroles").innerHTML = roles.toLowerCase();
+    }
+
+    function logout() {
+      const myModal = new bootstrap.Modal(document.getElementById('confirmSignOut'), {})
+      myModal.show();
+    }
+
+    function logoutConfirmYes() {
+      window.location.href = "/examples/login-portal.html";
+        document.cookie = "accessToken= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        document.cookie = "refreshToken= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        document.cookie = "username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+        document.cookie = "roles= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+    }
+
+    // function GetURLParameter(sParam){
+    //   var sPageURL = window.location.search.substring(1);
+    //     var sURLVariables = sPageURL.split('&');
+    //     for (var i = 0; i < sURLVariables.length; i++) 
+    //     {
+    //         var sParameterName = sURLVariables[i].split('=');
+    //         if (sParameterName[0] == sParam) 
+    //         {
+    //             return sParameterName[1];
+    //         }
+    //     }
+    // }​
+
+    async function permitValidation(){
+
+      const queryString = window.location.search;
+      console.log(queryString);
+      const urlParams = new URLSearchParams(queryString);
+      const uuid = urlParams.get('uuid')
+
+      try{
+        const response = await fetch(`http://localhost:9090/permit/validation/${uuid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dpIiwiaWF0IjoxNjkyNzYxNzU4fQ.9oJhc8nnCowNxQKnyXtFN2ZQ9La99t1cyKNN-WoJVn1qotEnqar6ngkz8IpOhr8zH_sUcOIZYlWzFRbMF3f_lA'
+              },
+            // body: JSON.stringify({
+            //     username,
+            //     password
+            // })
+        });
+        const data = await response.json();
+        
+        if(data.status === true) {
+          let statusCode = '200 :';
+          document.getElementById("statusCodeVal").innerHTML = statusCode;
+          let statusName = 'OK';
+          document.getElementById("statusVal").innerHTML = statusName;
+          let message = data.message;
+          document.getElementById("messageVal").innerHTML = message;
+        }else{
+          let statusCode = '400 :';
+          document.getElementById("statusCodeVal").innerHTML = statusCode;
+          let statusName = 'FAILED';
+          document.getElementById("statusVal").innerHTML = statusName;
+          let message = data.message;
+          document.getElementById("messageVal").innerHTML = message;
+        }
+      } catch (error) {
+            console.error(error);
+      }
+
+    }
+</script>
+<!--end::OverlayScrollbars Configure-->
